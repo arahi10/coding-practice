@@ -5,6 +5,8 @@ main (){
     local problem
     problem="$*"
     problem="${problem//[[:space:]]/_}"
-    cp -r  templates "$problem"
+    cp -r templates "$problem"
+    git fetch origin
+    git switch -c "$problem" main
 }
 main "$@"
