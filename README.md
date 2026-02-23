@@ -48,6 +48,8 @@
   - レビュー依頼定型文
 
 ```text
+お世話になっております．
+[Problem-Title] に取り組みました。
 レビューをお願いいたします．
 問題: [Problem-Link]
 PR: [Pull-Request-URL]
