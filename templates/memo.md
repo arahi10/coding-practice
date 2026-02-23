@@ -1,16 +1,10 @@
-<!-- PR のタイトルには， LeetCode の問題タイトルを含める．-->
-<!-- レビュー依頼定型文
-[問題とそのリンク]を解きました．
-[Pull Request の URL]
-レビューをお願いします．
- -->
-# [Problem TitLe] <!-- omit in toc -->
+# Problem TitLe  <!-- omit in toc -->
 
 ## 1. 問題
 
 ### 1.1. リンク
 
-<>
+Problem Link
 
 ### 1.2. 問題概要 (閲覧制限のある問題の場合のみ)
 
