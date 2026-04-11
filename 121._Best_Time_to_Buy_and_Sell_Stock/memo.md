@@ -10,7 +10,7 @@
 
 ## 2. 次に取り組む問題のリンク
 
-<>
+<https://leetcode.com/problems/permutations/description/>
 <!-- markdownlint-disable-file MD033 -->
 
 ## 3. ステップ1
