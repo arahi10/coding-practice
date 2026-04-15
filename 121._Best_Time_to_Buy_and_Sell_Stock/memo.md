@@ -15,7 +15,7 @@
 
 ## 3. ステップ1
 
-愚直解は買う日と売る日の全探索で，与えられるストックプライスが$N$日分だとして$O(N^2)$．
+愚直解は買う日と売る日の全探索で，与えられるストックプライスが $N$ 日分だとして $O(N^2)$ ．
 これより計算量が良いアルゴリズムはいろいろある．
 
 <details>
@@ -46,30 +46,19 @@ class Solution:
 - [アルゴリズムイントロダクション](https://www.amazon.co.jp/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%E3%82%A4%E3%83%B3%E3%83%88%E3%83%AD%E3%83%80%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3-%E7%AC%AC3%E7%89%88-%E7%B7%8F%E5%90%88%E7%89%88-%E4%B8%96%E7%95%8C%E6%A8%99%E6%BA%96MIT%E6%95%99%E7%A7%91%E6%9B%B8-%E3%82%B3%E3%83%AB%E3%83%A1%E3%83%B3/dp/476490408X), CLRS, の分割統治の章で見たことある．
 - 階差を作って部分配列の和の最大化問題に言い換え→"真ん中"をまたぐ部分配列なら線形で最適解を計算出来て，またがない奴は部分問題の解になるから，(またぐやつ, またがない左右の部分問題) の3つに分割して統治する，という方針だったはず．
 - 思い出してみる；
-  1. ストックプライス列 $\text{prices}$ の長さ$N$ に対して，元問題は$$
-  \begin{align*}
-   &\underset{0\le i \le j < N} {\text{maximize}}  & \text{prices}[j]-\text{prices}[i].
-  \end{align*}
-  $$ ここで，階差数列 $\text{diffs}[i] := \text{prices}[i+1]-\text{prices}[i]\ (i=0,\dots,N-2)$ を用いると， $\text{prices}[i] = \text{prices}[0]+\sum_{k=0}^{i-1}\text{diffs}[k]\ (i=0, \dots, N-1)$より， $$
-  \begin{align*}
-   &\underset{0\le i \le j < N} {\text{maximize}}  & \sum_{k=i}^{j-1}\text{diffs}[k]
-  \end{align*}$$ と書き換えられる．すなわち，部分配列の和の最大化問題に帰着できる．
-  1. ある部分配列$\text{diffs}[i:j]$に対して，その部分配列$\text{diffs}[k:l]$は，以下の3通りに分類できる
-     1. 真ん中より左側 ($l\le \lfloor\frac{i+j}{2}\rfloor$)
+  1. ストックプライス列 $\text{prices}$ の長さ $N$ に対して，元問題は $$\underset{0\le i \le j < N} {\text{maximize}}   \text{prices}[j]-\text{prices}[i].$$ ここで，階差数列 $\text{diffs}[i] := \text{prices}[i+1]-\text{prices}[i]\ (i=0,\dots,N-2)$ を用いると， $\text{prices}[i] = \text{prices}[0]+\sum_{k=0}^{i-1}\text{diffs}[k]\ (i=0, \dots, N-1)$ より， $$\underset{0\le i \le j < N} {\text{maximize}}  \sum_{k=i}^{j-1}\text{diffs}[k]$$ と書き換えられる．すなわち，部分配列の和の最大化問題に帰着できる．
+  1. ある部分配列 $\text{diffs}[i:j]$ に対して，その部分配列 $\text{diffs}[k:l]$ は，以下の3通りに分類できる
+     1. 真ん中より左側 ( $l\le \lfloor\frac{i+j}{2}\rfloor$ )
         - これは部分問題で，再帰的に解ける
-     2. 真ん中より右側 ($\lfloor\frac{i+j}{2}\rfloor\le k$)
+     2. 真ん中より右側 ( $\lfloor\frac{i+j}{2}\rfloor\le k$ )
         - これも部分問題で，再帰的に解ける
-     3. 真ん中を含む ($k<\lfloor\frac{i+j}{2}\rfloor< l$)
-        - これは$j-i$に対して線形時間で解ける
-  1. ii. の性質により，効率的に解ける．$N$に対する時間計算量を$T(N)$としたとき$$
-  \begin{align*}
-  T(N) = 2T\left(\frac{N}{2}\right) + \Theta(N)
-  \end{align*}
-  $$を満たすので，$T(N) = O(N\log N)$.
+     3. 真ん中を含む ( $k<\lfloor\frac{i+j}{2}\rfloor< l$ )
+        - これは $j-i$ に対して線形時間で解ける
+  1. ii. の性質により，効率的に解ける． $N$ に対する時間計算量を $T(N)$ としたとき $$T(N) = 2T\left(\frac{N}{2}\right) + \Theta(N)$$ を満たすので， $T(N) = O(N\log N)$ .
 
 </details>
 
-時間計算量 $O(N \log N)$・空間計算量 $O(N)$ ．
+時間計算量 $O(N \log N)$ ・空間計算量 $O(N)$ ．
 
 ```python
 class Solution:
@@ -111,34 +100,26 @@ class Solution:
 <summary> 名前がついてる線形時間アルゴリズム</summary>
 
 - なんか線形で解くやつに名前が付いていて，最大化問題を適宜書き換えると帰着できたはず
-  - $$
-  \begin{align*}
-  &\underset{0\le i < j < N} {\text{maximize}}  & \sum_{k=i}^{j-1}\text{diffs}[k]\\
-  =&\underset{0< j < N} {\text{maximize}}  & \left\{\underset{0\le i < j} {\text{maximize}}\sum_{k=i}^{j-1}\text{diffs}[k]\right\}\\
-  =&\underset{0< j < N} {\text{maximize}}  & P_{j},
-  \end{align*}
-  $$ where $P_{j}:= \underset{0\le i < j } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k]$.
-  - $P_{1} = \text{diffs}[0]$ かつ $j>1$に対して$$
-\begin{align*}
-P_{j} &= \underset{0\le i < j } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k]&\\
-&=  \max\left(\underset{0\le i < j-1 } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k],\; \sum_{k=j-1}^{j-1}\text{diffs}[k]\right)&(i\neq j-1\text{と}i=j-1\text{に分割})\\
-&= \max\left(\underset{0\le i < j-1 } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k],\; \text{diffs}[j-1]\right)&\\
-&= \max\left(\underset{0\le i < j-1 } {\text{maximize}}  \left\{ \sum_{k=i}^{j-2}\text{diffs}[k] + \text{diffs}[j-1]\right\},\; \text{diffs}[j-1]\right),&(k\le j-2\text{と}k=j-1\text{に分割})\\
-\therefore P_{j} &= \max\left(P_{j-1} + \text{diffs}[j-1],\; \text{diffs}[j-1]\right).
-\end{align*}$$
-  - 得られた $P_{j}$ の漸化式から，$\{P_{j}\}_{j=1}^{N-1}$ の計算は全体で $O(N)$ で行える．
+  - $\underset{0\le i < j < N} {\text{maximize}}  \sum_{k=i}^{j-1}\text{diffs}[k]$<br>
+  $=\underset{0< j < N} {\text{maximize}}   \left\\{\underset{0\le i < j} {\text{maximize}}\sum_{k=i}^{j-1}\text{diffs}[k]\right\\}$<br>
+  $=\underset{0< j < N} {\text{maximize}}   P_{j},$ where $P_{j}:= \underset{0\le i < j } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k]$.
+  - $P_{1} = \text{diffs}[0]$ かつ $j>1$ に対して $P_{j} = \underset{0\le i < j } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k]$<br>
+$=  \max\left(\underset{0\le i < j-1 } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k],\\; \sum_{k=j-1}^{j-1}\text{diffs}[k]\right)(i\neq j-1\text{と}i=j-1\text{に分割})$<br>
+$= \max\left(\underset{0\le i < j-1 } {\text{maximize}}   \sum_{k=i}^{j-1}\text{diffs}[k],\\; \text{diffs}[j-1]\right)$<br>
+$= \max\left(\underset{0\le i < j-1 } {\text{maximize}}  \left\\{ \sum_{k=i}^{j-2}\text{diffs}[k] + \text{diffs}[j-1]\right\\},\\; \text{diffs}[j-1]\right),(k\le j-2\text{と}k=j-1\text{に分割})$<br>
+$\therefore P_{j} = \max\left(P_{j-1} + \text{diffs}[j-1],\\; \text{diffs}[j-1]\right).$
+  - 得られた $P_{j}$ の漸化式から， $P_{j} (j=1,\dots,N-1)$ の計算は全体で $O(N)$ で行える．
   - Kadane's Algorithm.
   - 実装量は少ないだろうが，この流れで思い出すのに紙とペンが必要．
-    - ほかの思い出し方としては，ある日$i$に売るときの最大利益が分かっているなら，その次の日$i+1$に売るときの最大利益はすぐに計算できる；日$i$の最大利益を達成する売買と同じ日に買うか，買う日も変えるか．
-      - 同じ日に買うときの利益は，$\text{diff}[i]$を日$i$の最大利益に足せば求められる．
-        - 利益は買う日を$j$として$\text{prices}[i+1] - \text{prices}[j] = (\text{prices}[i] - \text{prices}[j]) + (\text{prices}[i+1] - \text{prices}[i]) $で，第一項は前日の最大利益，第二項は$\text{diff}[i]$とそれぞれ等しい．
-      - 違う日に買うときの最大利益は，日$i$の利益の最大性より，買う日を日$i$にするときしか達成しえない．もし日$k<i$があって，$$\text{prices}[i+1] - \text{prices}[k] > \text{prices}[i+1] - \text{prices}[j]$$ならば，両辺に$\text{prices}[i] - \text{prices}[i+1]$を足せば$$
-      \text{prices}[i] - \text{prices}[k] > \text{prices}[i] - \text{prices}[j]$$となるが，これは日$i$で売るときの右辺の最大性に反する．よってこのような日$k < i$は存在しないから，日$i$で買うとするしかない．
+    - ほかの思い出し方としては，ある日 $i$ に売るときの最大利益が分かっているなら，その次の日 $i+1$ に売るときの最大利益はすぐに計算できる；日 $i$ の最大利益を達成する売買と同じ日に買うか，買う日も変えるか．
+      - 同じ日に買うときの利益は， $\text{diff}[i]$ を日 $i$ の最大利益に足せば求められる．
+        - 利益は買う日を $j$ として $\text{prices}[i+1] - \text{prices}[j] = (\text{prices}[i] - \text{prices}[j]) + (\text{prices}[i+1] - \text{prices}[i])$ で，第一項は前日の最大利益，第二項は $\text{diff}[i]$ とそれぞれ等しい．
+      - 違う日に買うときの最大利益は，日 $i$ の利益の最大性より，買う日を日 $i$ にするときしか達成しえない．もし日 $k<i$ があって， $$\text{prices}[i+1] - \text{prices}[k] > \text{prices}[i+1] - \text{prices}[j]$$ ならば，両辺に $\text{prices}[i] - \text{prices}[i+1]$ を足せば $$\text{prices}[i] - \text{prices}[k] > \text{prices}[i] - \text{prices}[j]$$ となるが，これは日 $i$ で売るときの右辺の最大性に反する．よってこのような日 $k < i$ は存在しないから，日 $i$ で買うとするしかない．
       - 動的計画法チックな論法だから思い出しやすいだけで，説明なしに初見で理解できる気がしない．処理の説明は簡単だが，アルゴリズムの正当性の説明は普通に面倒くさい．
 
 </details>
 
-時間計算量 $O(N)$ ・空間計算量 $O(N)$．
+時間計算量 $O(N)$ ・空間計算量 $O(N)$ ．
 
 ```python
 class Solution:
@@ -156,7 +137,7 @@ class Solution:
 
 ```
 
-`diffs`を$N$日分すべて同時に記憶しておく必要はないのでジェネレータ式で空間計算量 $O(1)$ にもできる;
+`diffs`を $N$ 日分すべて同時に記憶しておく必要はないのでジェネレータ式で空間計算量  $O(1)$  にもできる;
 
 ```python
 class Solution:
@@ -215,13 +196,13 @@ class Solution:
 - なんかのPEPで1行79文字以下推奨だったはずなので多めに改行しておく
   - [PEP8](https://peps.python.org/pep-0008/)でした．
 - `__find_center_crossing_max_profit` で`itertools.islice`は以下の2点を理由として使わない．
-  - 時間計算量が$O(stop)$っぽいので([cf](https://docs.python.org/3/library/itertools.html#itertools.islice))，全体の計算量を悪化させてしまう．
+  - 時間計算量が $O(\text{stop})$ っぽいので([cf](https://docs.python.org/3/library/itertools.html#itertools.islice))，全体の計算量を悪化させてしまう．
   - `itertools.islice` は`start, stop`に非負整数，`step` に正整数を要求する．今回の実装は`step = -1`あるいは`stop = -1`(`begin = 0` のとき)とした呼び出しでこの要求に違反する．
     - `begin = 0` のとき，スライスで書いたとしても，`arr[center - 1 : -1 : -1] = []`となってしまい，今回ほしいものである`[arr[center - 1], ..., arr[1], arr[0]]` は取れない．
       - こうなる理由は要調査．
       - 理解では以下の挙動をするから；
-        1. $N=len(arr)$としてインデックス `start`,`stop`の評価 ($[-N, N]$にクリップしてから負の数は$+N$して非負にする)
-        2. `start`と`step`が等しい，`step`が0，あるいは，$\text{stop} - \text{start}$と`step`が異符号であるときは空配列を返す．
+        1. $N=len(arr)$ としてインデックス `start`,`stop`の評価 ( $[-N, N]$ にクリップしてから負の数は $+N$ して非負にする)
+        2. `start`と`step`が等しい，`step`が0，あるいは， $\text{stop} - \text{start}$ と`step`が異符号であるときは空配列を返す．
         3. そうでなければ指定されたインデックスの要素を取り出して配列にして返す．
 
 ```python
