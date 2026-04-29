@@ -363,3 +363,53 @@ class Solution:
         return max_profit
 
 ```
+
+## 6. ステップ4
+
+- 以下のコメントを受けての修正
+  - liquo-rice さんから
+    - > 計算上問題は発生しないですが、当日までの最低価格ではなく、前日までの最低価格を使った方が直感的かと思いました。
+    - `itertools.islice` は長くなるので使わず単純に list のスライスでやることにした．
+  - nodchip さんから (`acc_min` という変数名に対して)
+    - > こちらのコメントをご参照ください。(hemispherium/LeetCode_Arai60#10 (comment))[https://github.com/hemispherium/LeetCode_Arai60/pull/10#discussion_r2618518592]
+  - 2つをうけて： 累積の最小値を計算する時点では"前日までの最低価格" という意味合いは特にないので，こちらの変数は単に `accumulated_minimums` にし， for ループで受ける変数 `previous_min` にのみにその意味合いを持たせることにした．
+
+```python
+import itertools
+
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        accumulated_minimums = itertools.accumulate(prices, min)
+        max_profit = 0
+        for previous_min, current_price in zip(accumulated_minimums, prices[1:]):
+            current_profit = current_price - previous_min
+            max_profit = max(max_profit, current_profit)
+        return max_profit
+
+```
+
+- erutako さんの以下のコメントを受けての修正
+  - > "その日"というニュアンスでtoday("今日")が使われているのが少し違和感持ちました。(non-nativeです;) <br> today→current yesterday→previousのほうが時間軸が固定されずに良い気がしました。
+  - `current`, `previous` はループとの相性もよいので，ご提案どおりに変更するのが一番しっくりくるし読み手にもしっくり来てもらえるだろうと判断した．
+
+```python
+import itertools
+
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) < 2:
+            return 0
+        current_max_profit = 0
+        max_profit = 0
+        price_changes = (
+            current_price - previous_price
+            for previous_price, current_price in itertools.pairwise(prices)
+        )
+        for change in price_changes:
+            current_max_profit = max(current_max_profit + change, change)
+            max_profit = max(max_profit, current_max_profit)
+        return max_profit
+
+```
